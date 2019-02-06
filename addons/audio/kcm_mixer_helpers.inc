@@ -124,6 +124,10 @@ static INLINE const void *linear_spl32(SAMP_BUF * samp_buf, const ALLEGRO_SAMPLE
 	    p1 = spl->loop_start;
       }
       break;
+	case ALLEGRO_PLAYMODE_REVERSED:
+	 if (p1 < 0)
+	    p1 = spl->spl_data.len;
+      break;
    case _ALLEGRO_PLAYMODE_STREAM_ONCE:
    case _ALLEGRO_PLAYMODE_STREAM_ONEDIR:
       p0--;
@@ -250,6 +254,10 @@ static INLINE const void *linear_spl16(SAMP_BUF * samp_buf, const ALLEGRO_SAMPLE
 	 if (p1 < spl->loop_start)
 	    p1 = spl->loop_start;
       }
+      break;
+	case ALLEGRO_PLAYMODE_REVERSED:
+	   if (p1 < 0)
+	    p1 = spl->spl_data.len;
       break;
    case _ALLEGRO_PLAYMODE_STREAM_ONCE:
    case _ALLEGRO_PLAYMODE_STREAM_ONEDIR:
@@ -384,6 +392,16 @@ static INLINE const void *cubic_spl32(SAMP_BUF * samp_buf, const ALLEGRO_SAMPLE_
 	 p2 = spl->loop_start;
       if (p3 >= spl->loop_end)
 	 p3 = spl->loop_start;
+      break;
+	case ALLEGRO_PLAYMODE_REVERSED:
+	   if (p0 < 0) 
+	 p0 = spl->spl_data.len;
+		if (p1 < 0) 
+	 p1 = spl->spl_data.len;
+      if (p2 >= spl->spl_data.len)
+	 p2 = spl->spl_data.len - 1;
+      if (p3 >= spl->spl_data.len)
+	 p3 = spl->spl_data.len - 1;
       break;
    case _ALLEGRO_PLAYMODE_STREAM_ONCE:
    case _ALLEGRO_PLAYMODE_STREAM_ONEDIR:
