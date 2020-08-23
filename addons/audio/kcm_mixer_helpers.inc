@@ -129,6 +129,10 @@ static INLINE const void *linear_spl32(SAMP_BUF * samp_buf, const ALLEGRO_SAMPLE
       p0--;
       p1--;
       break;
+	case ALLEGRO_PLAYMODE_REVERSED:
+		if (p1 < 0)
+			p1 = spl->spl_data.len; // FIXME: should be spl->loop_end-1?
+		break;
    }
 
    p0 *= maxc;
@@ -256,6 +260,10 @@ static INLINE const void *linear_spl16(SAMP_BUF * samp_buf, const ALLEGRO_SAMPLE
       p0--;
       p1--;
       break;
+	case ALLEGRO_PLAYMODE_REVERSED:
+		if (p1 < 0)
+			p1 = spl->spl_data.len; // FIXME: should be spl->loop_end-1?
+		break;
    }
 
    p0 *= maxc;
@@ -392,6 +400,16 @@ static INLINE const void *cubic_spl32(SAMP_BUF * samp_buf, const ALLEGRO_SAMPLE_
       p1 -= 2;
       p2 -= 2;
       p3 -= 2;
+      break;
+	case ALLEGRO_PLAYMODE_REVERSED:
+	  if (p0 < 0) 
+		p0 = spl->spl_data.len;
+	  if (p1 < 0) 
+		p1 = spl->spl_data.len;
+      if (p2 >= spl->spl_data.len)
+		p2 = spl->spl_data.len - 1;
+      if (p3 >= spl->spl_data.len)
+		p3 = spl->spl_data.len - 1;
       break;
    }
 

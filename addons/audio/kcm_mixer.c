@@ -214,6 +214,17 @@ static bool fix_looped_position(ALLEGRO_SAMPLE_INSTANCE *spl)
          }
          return true;
 
+      case ALLEGRO_PLAYMODE_REVERSED:
+         if (spl->step > 0.0)
+            spl->step = -spl->step; // FIXME: this should not be here lol? what is this?
+
+         if (spl->pos > 0) {
+            return true;
+         }
+         spl->pos = spl->spl_data.len;
+         spl->is_playing = false;
+         return false;
+
       case ALLEGRO_PLAYMODE_ONCE:
          if (spl->pos < spl->spl_data.len) {
             return true;
