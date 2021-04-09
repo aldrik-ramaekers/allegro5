@@ -70,7 +70,7 @@ static int sdl_allocate_voice(ALLEGRO_VOICE *voice)
    want.callback = audio_callback;
    want.userdata = sv;
 
-   sv->device = SDL_OpenAudioDevice("bazinga!", 0, &want, &sv->spec,
+   sv->device = SDL_OpenAudioDevice(NULL, 0, &want, &sv->spec,
       SDL_AUDIO_ALLOW_FORMAT_CHANGE);
 
    voice->extra = sv;
@@ -218,13 +218,8 @@ static _AL_LIST* sdl_get_devices()
          int len = strlen(SDL_GetAudioDeviceName(i, 0)) + 1;
 
          ALLEGRO_AUDIO_DEVICE* device = (ALLEGRO_AUDIO_DEVICE*)al_malloc(sizeof(ALLEGRO_AUDIO_DEVICE));
-         device->identifier = (void*)al_malloc(sizeof(int));
          device->name = (char*)al_malloc(len);
-
-         memset(device->identifier, 0, sizeof(int));
-         memset(device->name, 0, len);
-
-         memcpy(device->identifier, &i, sizeof(int));
+         device->identifier = device->name; // Name returned by SDL2 is used to identify devices.
          strcpy(device->name, SDL_GetAudioDeviceName(i, 0));
 
          _al_list_push_back_ex(device_list, device, _device_list_dtor);
