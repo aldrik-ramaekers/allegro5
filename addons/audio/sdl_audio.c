@@ -70,7 +70,7 @@ static int sdl_allocate_voice(ALLEGRO_VOICE *voice)
    want.callback = audio_callback;
    want.userdata = sv;
 
-   sv->device = SDL_OpenAudioDevice(NULL, 0, &want, &sv->spec,
+   sv->device = SDL_OpenAudioDevice("bazinga!", 0, &want, &sv->spec,
       SDL_AUDIO_ALLOW_FORMAT_CHANGE);
 
    voice->extra = sv;
