@@ -97,16 +97,14 @@ static void sink_info_cb(pa_context *c, const pa_sink_info *i, int eol,
       return;
    *ret = i->state;
 
-   int len = strlen(i->description) + 1;
+   int iden_len = strlen(i->name) + 1;
+   int name_len = strlen(i->description) + 1;
    ALLEGRO_AUDIO_DEVICE* device = (ALLEGRO_AUDIO_DEVICE*)al_malloc(sizeof(ALLEGRO_AUDIO_DEVICE));
-   device->identifier = (void*)al_malloc(sizeof(uint32_t));
-   device->name = (char*)al_malloc(len);
-
-   memset(device->identifier, 0, sizeof(uint32_t));
-   memset(device->name, 0, len);
-
-   memcpy(device->identifier, &i->index, sizeof(uint32_t));
+   device->identifier = (void*)al_malloc(iden_len);
+   device->name = (char*)al_malloc(name_len);
+   
    strcpy(device->name, i->description);
+   strcpy(device->identifier, i->name);
 
    _al_list_push_back_ex(device_list, device, _device_list_dtor);
 }
@@ -281,7 +279,7 @@ static int pulseaudio_allocate_voice(ALLEGRO_VOICE *voice)
    ba.prebuf    = -1;
    ba.minreq    = -1;
    ba.fragsize  = -1;
-
+   int error;
    pv->s = pa_simple_new(
       NULL,                // Use the default server.
       al_get_app_name(),     
@@ -291,7 +289,7 @@ static int pulseaudio_allocate_voice(ALLEGRO_VOICE *voice)
       &ss,                
       NULL,                // Use default channel map
       &ba,                
-      NULL                 // Ignore error code.
+      &error                 // Ignore error code.
    );
 
    if (!pv->s) {

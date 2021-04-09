@@ -205,7 +205,6 @@ static void _device_list_dtor(void* value, void* userdata)
 {
    ALLEGRO_AUDIO_DEVICE* device = (ALLEGRO_AUDIO_DEVICE*)value;
    al_free(device->name);
-   al_free(device->identifier);
 }
 
 static _AL_LIST* sdl_get_devices()
