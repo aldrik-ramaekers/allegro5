@@ -281,7 +281,7 @@ static int pulseaudio_allocate_voice(ALLEGRO_VOICE *voice)
    ba.prebuf    = -1;
    ba.minreq    = -1;
    ba.fragsize  = -1;
-   int error;
+
    pv->s = pa_simple_new(
       NULL,                // Use the default server.
       al_get_app_name(),     
@@ -291,7 +291,7 @@ static int pulseaudio_allocate_voice(ALLEGRO_VOICE *voice)
       &ss,                
       NULL,                // Use default channel map
       &ba,                
-      &error                 // Ignore error code.
+      NULL                 // Ignore error code.
    );
 
    if (!pv->s) {
