@@ -880,12 +880,14 @@ static void alsa_deallocate_recorder(ALLEGRO_AUDIO_RECORDER *r)
 
 static void _device_list_dtor(void* value, void* userdata)
 {
+   (void)userdata;
+
    ALLEGRO_AUDIO_DEVICE* device = (ALLEGRO_AUDIO_DEVICE*)value;
    al_free(device->name);
    al_free(device->identifier);
 }
 
-static _AL_LIST* alsa_get_devices()
+static _AL_LIST* alsa_get_devices(void)
 {
    if (!device_list) {
       device_list = _al_list_create();
@@ -908,8 +910,8 @@ static _AL_LIST* alsa_get_devices()
             continue;
          }
 
-         char* card_name = snd_ctl_card_info_get_name(card_info);
-         char* card_id = snd_ctl_card_info_get_id(card_info);
+         snd_ctl_card_info_get_name(card_info);
+         snd_ctl_card_info_get_id(card_info);
 
          int dev_num = -1;
 
@@ -921,8 +923,9 @@ static _AL_LIST* alsa_get_devices()
             if (dev_num < 0) break;
 
             void **hints;
-            int success = snd_device_name_hint(dev_num, "pcm", &hints);      
-            char**n = hints;
+            int success = snd_device_name_hint(dev_num, "pcm", &hints);
+            if (success < 0) continue;
+            char**n = (char**)hints;
                
             char* identifier = 0;
             char* name = 0;
