@@ -203,11 +203,13 @@ static void sdl_deallocate_recorder(ALLEGRO_AUDIO_RECORDER *r)
 
 static void _device_list_dtor(void* value, void* userdata)
 {
+   (void)userdata;
+
    ALLEGRO_AUDIO_DEVICE* device = (ALLEGRO_AUDIO_DEVICE*)value;
    al_free(device->name);
 }
 
-static _AL_LIST* sdl_get_devices()
+static _AL_LIST* sdl_get_devices(void)
 {
    if (!device_list) {
       device_list = _al_list_create();
