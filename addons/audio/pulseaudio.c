@@ -77,6 +77,8 @@ static unsigned int get_buffer_size(const ALLEGRO_CONFIG *config)
 
 static void _device_list_dtor(void* value, void* userdata)
 {
+   (void)userdata;
+
    ALLEGRO_AUDIO_DEVICE* device = (ALLEGRO_AUDIO_DEVICE*)value;
    al_free(device->name);
    al_free(device->identifier);
@@ -537,7 +539,7 @@ static void pulseaudio_deallocate_recorder(ALLEGRO_AUDIO_RECORDER *r)
    al_free(r->extra);
 }
 
-static _AL_LIST* pulseaudio_get_devices()
+static _AL_LIST* pulseaudio_get_devices(void)
 {
    return device_list;
 }
